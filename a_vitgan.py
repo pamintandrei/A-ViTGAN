@@ -133,7 +133,7 @@ class A_VITGAN(nn.Module):
         self.transformer_block_def_3 = TransformerBlock(dim)
         self.transformer_block_def_4 = TransformerBlock(dim)
 
-    def generate_attack_images_directional(self, original_images,attack_matrix, epsilon=20):
+    def generate_attack_images(self, original_images,attack_matrix, epsilon=20):
         for i in range(0,len(original_images)):
             original_images[i] = torch.mul(attack_matrix[i], min(1,epsilon/torch.linalg.norm(attack_matrix[i]))) + original_images[i]
         return original_images    
@@ -173,6 +173,6 @@ class A_VITGAN(nn.Module):
         x = torch.cat((x_atk_def,x_atk,x_def),dim=-1)
         x=self.convolution(x)
         x=self.final_transpose(x)
-        x = self.generate_attack_images_directional(img, x)
+        x = self.generate_attack_images(img, x)
         return x
         
